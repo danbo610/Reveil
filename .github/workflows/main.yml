@@ -185,9 +185,9 @@ jobs:
           (
             cd "$package_root"
             /usr/bin/zip -qry "$tipa_path" Payload
+            shasum -a 256 "$(basename "$tipa_path")" | tee "$(basename "$tipa_path").sha256"
           )
           /usr/bin/unzip -tq "$tipa_path"
-          shasum -a 256 "$tipa_path" | tee "$tipa_path.sha256"
 
           echo "tipa_path=$tipa_path" >> "$GITHUB_OUTPUT"
           echo "Built unsigned TrollStore package: $tipa_path"
