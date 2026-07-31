@@ -13,15 +13,9 @@ on:
         required: true
         default: "441"
         type: string
-  pull_request:
-    branches: [main]
-    paths:
-      - ".github/workflows/main.yml"
-      - "Reveil/**"
-      - "ReveilHelper/**"
-      - "library-stub/**"
-      - "Reveil.xcodeproj/**"
   push:
+    branches:
+      - main
     tags:
       - "v*"
 
