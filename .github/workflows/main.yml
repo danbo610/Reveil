@@ -45,7 +45,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Select Xcode 15.4
         uses: maxim-lobanov/setup-xcode@v1
@@ -193,7 +193,7 @@ jobs:
           echo "Built unsigned TrollStore package: $tipa_path"
 
       - name: Upload TrollStore TIPA
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ steps.version.outputs.artifact_name }}
           path: |
@@ -205,7 +205,7 @@ jobs:
 
       - name: Upload xcodebuild logs
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: xcodebuild-logs-${{ github.run_id }}
           path: ${{ runner.temp }}/*-xcodebuild.log
