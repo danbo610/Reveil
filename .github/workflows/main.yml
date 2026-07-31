@@ -1,0 +1,213 @@
+name: Build unsigned TrollStore TIPA
+
+on:
+  workflow_dispatch:
+    inputs:
+      marketing_version:
+        description: App version (CFBundleShortVersionString)
+        required: true
+        default: "3.4"
+        type: string
+      build_number:
+        description: Build number (CFBundleVersion)
+        required: true
+        default: "441"
+        type: string
+  pull_request:
+    branches: [main]
+    paths:
+      - ".github/workflows/main.yml"
+      - "Reveil/**"
+      - "ReveilHelper/**"
+      - "library-stub/**"
+      - "Reveil.xcodeproj/**"
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: trollstore-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PROJECT: Reveil.xcodeproj
+  APP_SCHEME: Reveil
+  HELPER_SCHEME: ReveilHelper
+
+jobs:
+  build:
+    name: Build unsigned TrollStore TIPA
+    runs-on: macos-14
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Select Xcode 15.4
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: "15.4"
+
+      - name: Resolve version
+        id: version
+        env:
+          INPUT_MARKETING_VERSION: ${{ inputs.marketing_version }}
+          INPUT_BUILD_NUMBER: ${{ inputs.build_number }}
+        run: |
+          set -Eeuo pipefail
+
+          marketing_version="${INPUT_MARKETING_VERSION:-3.4}"
+          build_number="${INPUT_BUILD_NUMBER:-441}"
+
+          if [[ "${GITHUB_REF_TYPE:-}" == "tag" ]]; then
+            tag="${GITHUB_REF_NAME#v}"
+            if [[ "$tag" =~ ^([0-9]+\.[0-9]+)-([0-9]+)$ ]]; then
+              marketing_version="${BASH_REMATCH[1]}"
+              build_number="${BASH_REMATCH[2]}"
+            elif [[ "$tag" =~ ^([0-9]+\.[0-9]+(\.[0-9]+)+)$ ]]; then
+              marketing_version="${BASH_REMATCH[1]}"
+              build_number="${marketing_version##*.}"
+            else
+              echo "::error::Unsupported tag format: ${GITHUB_REF_NAME}"
+              exit 1
+            fi
+          fi
+
+          if [[ ! "$marketing_version" =~ ^[0-9]+(\.[0-9]+){1,2}$ ]]; then
+            echo "::error::Invalid marketing version: $marketing_version"
+            exit 1
+          fi
+          if [[ ! "$build_number" =~ ^[0-9]+$ ]]; then
+            echo "::error::Invalid build number: $build_number"
+            exit 1
+          fi
+
+          artifact_name="Reveil_${marketing_version}-${build_number}_TrollStore"
+          echo "MARKETING_VERSION=$marketing_version" >> "$GITHUB_ENV"
+          echo "BUILD_NUMBER=$build_number" >> "$GITHUB_ENV"
+          echo "marketing_version=$marketing_version" >> "$GITHUB_OUTPUT"
+          echo "build_number=$build_number" >> "$GITHUB_OUTPUT"
+          echo "artifact_name=$artifact_name" >> "$GITHUB_OUTPUT"
+
+      - name: Show build environment
+        run: |
+          set -Eeuo pipefail
+          sw_vers
+          xcodebuild -version
+          xcodebuild -list -project "$PROJECT"
+
+      - name: Resolve Swift packages
+        run: |
+          set -Eeuo pipefail
+          xcodebuild -resolvePackageDependencies \
+            -project "$PROJECT" \
+            -scheme "$APP_SCHEME" \
+            -clonedSourcePackagesDirPath "$RUNNER_TEMP/SourcePackages"
+
+      - name: Archive ReveilHelper
+        run: |
+          set -Eeuo pipefail
+          set -o pipefail
+          xcodebuild clean archive \
+            -project "$PROJECT" \
+            -scheme "$HELPER_SCHEME" \
+            -configuration Release \
+            -destination "generic/platform=macOS" \
+            -archivePath "$RUNNER_TEMP/ReveilHelper.xcarchive" \
+            -derivedDataPath "$RUNNER_TEMP/DerivedData" \
+            -clonedSourcePackagesDirPath "$RUNNER_TEMP/SourcePackages" \
+            CODE_SIGNING_ALLOWED=NO \
+            SKIP_INSTALL=NO \
+            | tee "$RUNNER_TEMP/ReveilHelper-xcodebuild.log"
+
+          test -x "$RUNNER_TEMP/ReveilHelper.xcarchive/Products/usr/local/bin/ReveilHelper"
+
+      - name: Archive Reveil for iOS
+        run: |
+          set -Eeuo pipefail
+          set -o pipefail
+          export PATH="$RUNNER_TEMP/ReveilHelper.xcarchive/Products/usr/local/bin:$PATH"
+
+          xcodebuild clean archive \
+            -project "$PROJECT" \
+            -scheme "$APP_SCHEME" \
+            -configuration Release \
+            -sdk iphoneos \
+            -destination "generic/platform=iOS" \
+            -archivePath "$RUNNER_TEMP/Reveil.xcarchive" \
+            -derivedDataPath "$RUNNER_TEMP/DerivedData" \
+            -clonedSourcePackagesDirPath "$RUNNER_TEMP/SourcePackages" \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            DEVELOPMENT_TEAM="" \
+            MARKETING_VERSION="$MARKETING_VERSION" \
+            CURRENT_PROJECT_VERSION="$BUILD_NUMBER" \
+            | tee "$RUNNER_TEMP/Reveil-xcodebuild.log"
+
+          test -d "$RUNNER_TEMP/Reveil.xcarchive/Products/Applications/Reveil.app"
+
+      - name: Package and verify unsigned TIPA
+        id: package
+        run: |
+          set -Eeuo pipefail
+
+          archive_app="$RUNNER_TEMP/Reveil.xcarchive/Products/Applications/Reveil.app"
+          package_root="$RUNNER_TEMP/Distribution"
+          package_app="$package_root/Payload/Reveil.app"
+          tipa_path="$package_root/Reveil_${MARKETING_VERSION}-${BUILD_NUMBER}.tipa"
+
+          mkdir -p "$package_root/Payload"
+          ditto "$archive_app" "$package_app"
+          rm -f "$package_app/embedded.mobileprovision"
+
+          while IFS= read -r nested_code; do
+            codesign --remove-signature "$nested_code" 2>/dev/null || true
+          done < <(find "$package_app" -type d \( -name "*.appex" -o -name "*.framework" \) -print)
+          codesign --remove-signature "$package_app" 2>/dev/null || true
+
+          actual_version=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" "$package_app/Info.plist")
+          actual_build=$(/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" "$package_app/Info.plist")
+          if [[ "$actual_version" != "$MARKETING_VERSION" || "$actual_build" != "$BUILD_NUMBER" ]]; then
+            echo "::error::Unexpected app version: ${actual_version} (${actual_build})"
+            exit 1
+          fi
+
+          if codesign --verify --deep --strict "$package_app" >/dev/null 2>&1; then
+            echo "::error::Reveil.app unexpectedly has a valid code signature"
+            exit 1
+          fi
+
+          (
+            cd "$package_root"
+            /usr/bin/zip -qry "$tipa_path" Payload
+          )
+          /usr/bin/unzip -tq "$tipa_path"
+          shasum -a 256 "$tipa_path" | tee "$tipa_path.sha256"
+
+          echo "tipa_path=$tipa_path" >> "$GITHUB_OUTPUT"
+          echo "Built unsigned TrollStore package: $tipa_path"
+
+      - name: Upload TrollStore TIPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.version.outputs.artifact_name }}
+          path: |
+            ${{ steps.package.outputs.tipa_path }}
+            ${{ steps.package.outputs.tipa_path }}.sha256
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 30
+
+      - name: Upload xcodebuild logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xcodebuild-logs-${{ github.run_id }}
+          path: ${{ runner.temp }}/*-xcodebuild.log
+          if-no-files-found: warn
+          retention-days: 14
