@@ -152,9 +152,14 @@ enum PerfLog {
                 let image = info.dli_fname.map {
                     (String(cString: $0) as NSString).lastPathComponent
                 } ?? "?"
-                let symbol = info.dli_sname.map { String(cString: $0) } ?? "?"
-                let offset = UInt(address) - UInt(bitPattern: info.dli_saddr)
-                NSLog("[reveil-perf]   %2d  %@  %@ + %lu", index, image, symbol, offset)
+                if let name = info.dli_sname, info.dli_saddr != nil {
+                    let offset = UInt(address) - UInt(bitPattern: info.dli_saddr)
+                    NSLog("[reveil-perf]   %2d  %@  %s + %lu", index, image, name, offset)
+                } else {
+                    // No symbol: report the offset within the image, which atos can resolve.
+                    let offset = UInt(address) - UInt(bitPattern: info.dli_fbase)
+                    NSLog("[reveil-perf]   %2d  %@  +0x%lx (image offset)", index, image, offset)
+                }
             } else {
                 NSLog("[reveil-perf]   %2d  0x%llx", index, address)
             }

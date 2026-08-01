@@ -65,7 +65,6 @@ struct TabsView: View {
             NavigationView {
                 AboutView()
                     .navigationBarTitleDisplayMode(.inline)
-                    .background(ColorfulBackground())
             }
             .tabItem {
                 Label(NSLocalizedString("ABOUT", comment: "About"), systemImage: "info.circle")
