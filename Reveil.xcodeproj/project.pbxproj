@@ -116,7 +116,6 @@
 		CC3F94252B4C506B00E67A19 /* View+ListSectionSeparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC3F94242B4C506B00E67A19 /* View+ListSectionSeparator.swift */; };
 		CC3F94272B4C51DD00E67A19 /* View+Material.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC3F94262B4C51DD00E67A19 /* View+Material.swift */; };
 		CC3F94292B4C52B000E67A19 /* View+ForegroundStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC3F94282B4C52B000E67A19 /* View+ForegroundStyle.swift */; };
-		DA0000000000000000000119 /* PerfLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0000000000000000000118 /* PerfLog.swift */; };
 		CC4AE2B82ACAA4B400DA23AC /* ReveilApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4AE2B72ACAA4B400DA23AC /* ReveilApp.swift */; };
 		CC4AE2BA2ACAA4B400DA23AC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4AE2B92ACAA4B400DA23AC /* ContentView.swift */; };
 		CC4AE2BC2ACAA4B500DA23AC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC4AE2BB2ACAA4B500DA23AC /* Assets.xcassets */; };
@@ -336,7 +335,6 @@
 		CC3F94262B4C51DD00E67A19 /* View+Material.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Material.swift"; sourceTree = "<group>"; };
 		CC3F94282B4C52B000E67A19 /* View+ForegroundStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+ForegroundStyle.swift"; sourceTree = "<group>"; };
 		CC4AE2B42ACAA4B400DA23AC /* Reveil.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Reveil.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		DA0000000000000000000118 /* PerfLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerfLog.swift; sourceTree = "<group>"; };
 		CC4AE2B72ACAA4B400DA23AC /* ReveilApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReveilApp.swift; sourceTree = "<group>"; };
 		CC4AE2B92ACAA4B400DA23AC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		CC4AE2BB2ACAA4B500DA23AC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -638,7 +636,6 @@
 				CC4AE2C52ACAA4F300DA23AC /* Views */,
 				CC21B5042ACD108E003EC114 /* Pages */,
 				CC4AE2B72ACAA4B400DA23AC /* ReveilApp.swift */,
-				DA0000000000000000000118 /* PerfLog.swift */,
 				CC4AE2B92ACAA4B400DA23AC /* ContentView.swift */,
 				CC21B5362ACD92B9003EC114 /* GlobalTimer.swift */,
 				CC4AE2BB2ACAA4B500DA23AC /* Assets.xcassets */,
@@ -1205,7 +1202,6 @@
 				CC21B4D02ACAF9BA003EC114 /* UsageWidget.swift in Sources */,
 				0F4955E42AD83FF400227265 /* TrafficEntry.swift in Sources */,
 				CC4AE2B82ACAA4B400DA23AC /* ReveilApp.swift in Sources */,
-				DA0000000000000000000119 /* PerfLog.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
