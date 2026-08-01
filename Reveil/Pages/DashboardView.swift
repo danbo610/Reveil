@@ -43,6 +43,20 @@ struct DashboardView: View, GlobalTimerObserver {
     var body: some View {
         ScrollView(.vertical) {
             VStack(spacing: 20) {
+                Section {
+                    NetworkAddressCard()
+                        .padding(.all, 12)
+                        .background(
+                            RoundedRectangle(cornerRadius: 4)
+                                .foregroundColor(Color(PlatformColor.secondarySystemBackgroundAlias))
+                                .opacity(0.25)
+                        )
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 4)
+                                .stroke(Color(PlatformColor.separatorAlias), lineWidth: 1)
+                        }
+                }
+
                 if PinStorage.shared.isPinned(forKey: .Security) {
                     Section { CheckmarkWidget() }
                 }

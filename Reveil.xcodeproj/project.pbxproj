@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		DA0000000000000000000107 /* ReveilWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0000000000000000000104 /* ReveilWidget.swift */; };
+		DA0000000000000000000115 /* NetworkAddressCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0000000000000000000113 /* NetworkAddressCard.swift */; };
+		DA0000000000000000000116 /* NetworkAddressModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0000000000000000000114 /* NetworkAddressModel.swift */; };
+		DA0000000000000000000117 /* NetworkAddressProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0000000000000000000105 /* NetworkAddressProvider.swift */; };
 		DA0000000000000000000108 /* NetworkAddressProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0000000000000000000105 /* NetworkAddressProvider.swift */; };
 		DA0000000000000000000110 /* ReveilWidget.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = DA0000000000000000000102 /* ReveilWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		0F0819382ADAE97200BB626C /* PinStorage.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0F0819372ADAE97200BB626C /* PinStorage.plist */; };
@@ -228,6 +231,8 @@
 /* Begin PBXFileReference section */
 		DA0000000000000000000102 /* ReveilWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ReveilWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA0000000000000000000104 /* ReveilWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReveilWidget.swift; sourceTree = "<group>"; };
+		DA0000000000000000000113 /* NetworkAddressCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkAddressCard.swift; sourceTree = "<group>"; };
+		DA0000000000000000000114 /* NetworkAddressModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkAddressModel.swift; sourceTree = "<group>"; };
 		DA0000000000000000000105 /* NetworkAddressProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkAddressProvider.swift; sourceTree = "<group>"; };
 		DA0000000000000000000106 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0F0819372ADAE97200BB626C /* PinStorage.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = PinStorage.plist; sourceTree = "<group>"; };
@@ -502,6 +507,7 @@
 				CC21B4CF2ACAF9BA003EC114 /* UsageWidget.swift */,
 				CC21B4E92ACB1E9E003EC114 /* TrafficWidget.swift */,
 				CC21B4ED2ACBC48C003EC114 /* CheckmarkWidget.swift */,
+				DA0000000000000000000113 /* NetworkAddressCard.swift */,
 			);
 			path = Dashboard;
 			sourceTree = "<group>";
@@ -540,6 +546,7 @@
 				0FD0D2692AE0CD95001DD1E8 /* Dashboard.swift */,
 				0F2CA12A2AE9479E00C76A78 /* Security.swift */,
 				0F2CA12D2AE948F500C76A78 /* SecurityCheck.swift */,
+				DA0000000000000000000114 /* NetworkAddressModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -1089,6 +1096,9 @@
 				0FD0D2702AE18D7A001DD1E8 /* ValueStyle.swift in Sources */,
 				CC5AE1BF2AD2F2010087F082 /* ifaddrs_safe.swift in Sources */,
 				CC21B4EE2ACBC48C003EC114 /* CheckmarkWidget.swift in Sources */,
+				DA0000000000000000000115 /* NetworkAddressCard.swift in Sources */,
+				DA0000000000000000000116 /* NetworkAddressModel.swift in Sources */,
+				DA0000000000000000000117 /* NetworkAddressProvider.swift in Sources */,
 				CC4AE2BA2ACAA4B400DA23AC /* ContentView.swift in Sources */,
 				CC21B4F22ACBCBEA003EC114 /* FieldWidget.swift in Sources */,
 				CC21B55D2AD055FC003EC114 /* NetworkInterfacesListView.swift in Sources */,

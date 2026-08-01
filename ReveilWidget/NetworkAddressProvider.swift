@@ -15,6 +15,10 @@
 
 import Foundation
 
+#if canImport(Darwin)
+import Darwin
+#endif
+
 struct NetworkAddress {
     let address: String
     let location: String
@@ -37,11 +41,13 @@ struct NetworkAddress {
 }
 
 struct NetworkAddresses {
+    var local: String?
     var domestic: NetworkAddress?
     var foreign: NetworkAddress?
     var blocked: NetworkAddress?
 
     static let placeholder = NetworkAddresses(
+        local: "192.168.1.100",
         domestic: NetworkAddress(reported: "113.90.130.56<br/>中国 深圳"),
         foreign: NetworkAddress(reported: "23.132.124.147<br/>美国 洛杉矶"),
         blocked: NetworkAddress(reported: "104.21.70.10<br/>美国 圣何塞")
@@ -55,6 +61,48 @@ enum NetworkAddressProvider {
     private static let referer = "https://ip111.cn/"
     private static let timeout: TimeInterval = 8
 
+    // Read straight from the interface list — no network involved, so it is always available even
+    // when every probe times out. Deliberately self-contained rather than reusing the app's
+    // interface models, because this file is compiled into the widget too.
+    static var localAddress: String? {
+        var interfaces: UnsafeMutablePointer<ifaddrs>?
+        guard getifaddrs(&interfaces) == 0 else { return nil }
+        defer { freeifaddrs(interfaces) }
+
+        var wifi: String?
+        var cellular: String?
+        var pointer = interfaces
+        while let current = pointer {
+            let interface = current.pointee
+            pointer = interface.ifa_next
+
+            guard interface.ifa_flags & UInt32(IFF_UP) != 0,
+                  let address = interface.ifa_addr,
+                  address.pointee.sa_family == UInt8(AF_INET)
+            else {
+                continue
+            }
+
+            var host = [CChar](repeating: 0, count: Int(NI_MAXHOST))
+            guard getnameinfo(address, socklen_t(address.pointee.sa_len),
+                              &host, socklen_t(host.count), nil, 0, NI_NUMERICHOST) == 0
+            else {
+                continue
+            }
+
+            let name = String(cString: interface.ifa_name)
+            let value = String(cString: host)
+            if name == "en0" {
+                wifi = value
+            } else if name == "pdp_ip0" {
+                cellular = value
+            }
+        }
+
+        // Wi-Fi first: when both are up it is the one carrying the traffic.
+        return wifi ?? cellular
+    }
+
     static func current() async -> NetworkAddresses {
         // Concurrently, so one slow probe does not hold up the other two. A probe that cannot be
         // reached simply yields nil, which the view renders as a dash rather than stale data.
@@ -63,6 +111,7 @@ enum NetworkAddressProvider {
         async let blocked = fetch(blockedProbeURL, parser: addressFromProbe)
 
         return await NetworkAddresses(
+            local: localAddress,
             domestic: NetworkAddress(reported: domestic),
             foreign: NetworkAddress(reported: foreign),
             blocked: NetworkAddress(reported: blocked)

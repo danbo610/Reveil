@@ -98,6 +98,7 @@ struct NetworkAddressWidgetView: View {
         .padding(.horizontal, compact ? 10 : 14)
         .padding(.vertical, compact ? 8 : 12)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+        .widgetURL(URL(string: "reveil://dashboard"))
         .widgetContainerBackground()
     }
 }

@@ -1089,3 +1089,9 @@
 
 /* Zero Filled */
 "ZERO_FILLED" = "零填充";
+
+"LAN_ADDRESS" = "内网";
+"DOMESTIC_ADDRESS" = "国内";
+"FOREIGN_ADDRESS" = "未墙";
+"BLOCKED_ADDRESS" = "被墙";
+"NETWORK_ADDRESSES" = "IP 地址";

@@ -7,6 +7,21 @@
 
 import SwiftUI
 
+/// Which tab is showing. Held outside the view so that a deep link handled by the app can switch
+/// tabs — SwiftUI's TabView only restores its own state on a cold launch, and the widget usually
+/// lands on an app that is already running.
+final class AppNavigation: ObservableObject {
+    static let shared = AppNavigation()
+
+    enum Tab: Int {
+        case dashboard, details, about
+    }
+
+    @Published var selectedTab: Tab = .dashboard
+
+    private init() {}
+}
+
 struct ContentView: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
@@ -24,8 +39,10 @@ struct ContentView: View {
 }
 
 struct TabsView: View {
+    @ObservedObject private var navigation = AppNavigation.shared
+
     var body: some View {
-        TabView {
+        TabView(selection: $navigation.selectedTab) {
             NavigationView {
                 DashboardView()
                     .navigationBarAttachBrand()
@@ -34,6 +51,7 @@ struct TabsView: View {
             .tabItem {
                 Label(NSLocalizedString("DASHBOARD", comment: "Dashboard"), systemImage: "square.grid.2x2")
             }
+            .tag(AppNavigation.Tab.dashboard)
 
             NavigationView {
                 DetailsView()
@@ -42,6 +60,7 @@ struct TabsView: View {
             .tabItem {
                 Label(NSLocalizedString("DETAILS", comment: "Details"), systemImage: "doc.text")
             }
+            .tag(AppNavigation.Tab.details)
 
             NavigationView {
                 AboutView()
@@ -51,6 +70,7 @@ struct TabsView: View {
             .tabItem {
                 Label(NSLocalizedString("ABOUT", comment: "About"), systemImage: "info.circle")
             }
+            .tag(AppNavigation.Tab.about)
         }
     }
 }

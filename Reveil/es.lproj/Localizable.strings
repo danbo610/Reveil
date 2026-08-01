@@ -1089,3 +1089,9 @@
 
 /* Zero Filled */
 "ZERO_FILLED" = "Llenado de ceros";
+
+"LAN_ADDRESS" = "Intranet";
+"DOMESTIC_ADDRESS" = "Nacional";
+"FOREIGN_ADDRESS" = "Exterior";
+"BLOCKED_ADDRESS" = "Bloqueado";
+"NETWORK_ADDRESSES" = "Direcciones IP";
