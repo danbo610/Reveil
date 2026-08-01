@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DA0000000000000000000107 /* ReveilWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0000000000000000000104 /* ReveilWidget.swift */; };
+		DA0000000000000000000108 /* NetworkAddressProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0000000000000000000105 /* NetworkAddressProvider.swift */; };
+		DA0000000000000000000110 /* ReveilWidget.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = DA0000000000000000000102 /* ReveilWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		0F0819382ADAE97200BB626C /* PinStorage.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0F0819372ADAE97200BB626C /* PinStorage.plist */; };
 		0F08193A2ADAEA3400BB626C /* PinStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F0819392ADAEA3400BB626C /* PinStorage.swift */; };
 		0F08193D2ADAF1C600BB626C /* DictionaryCoder in Frameworks */ = {isa = PBXBuildFile; productRef = 0F08193C2ADAF1C600BB626C /* DictionaryCoder */; };
@@ -174,6 +177,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		DA0000000000000000000112 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CC4AE2AC2ACAA4B400DA23AC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DA0000000000000000000101;
+			remoteInfo = ReveilWidget;
+		};
 		0F008FD32B3E7AB700158058 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = CC4AE2AC2ACAA4B400DA23AC /* Project object */;
@@ -191,6 +201,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		DA000000000000000000010F /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				DA0000000000000000000110 /* ReveilWidget.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5024F6F02B1829EE000CEAB5 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -205,6 +226,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		DA0000000000000000000102 /* ReveilWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ReveilWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA0000000000000000000104 /* ReveilWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReveilWidget.swift; sourceTree = "<group>"; };
+		DA0000000000000000000105 /* NetworkAddressProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkAddressProvider.swift; sourceTree = "<group>"; };
+		DA0000000000000000000106 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0F0819372ADAE97200BB626C /* PinStorage.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = PinStorage.plist; sourceTree = "<group>"; };
 		0F0819392ADAEA3400BB626C /* PinStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinStorage.swift; sourceTree = "<group>"; };
 		0F08193E2ADEB35500BB626C /* EntryKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryKey.swift; sourceTree = "<group>"; };
@@ -366,6 +391,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		DA000000000000000000010A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		0FA065752B3D8363000A7ECE /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -403,6 +435,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		DA0000000000000000000103 /* ReveilWidget */ = {
+			isa = PBXGroup;
+			children = (
+				DA0000000000000000000104 /* ReveilWidget.swift */,
+				DA0000000000000000000105 /* NetworkAddressProvider.swift */,
+				DA0000000000000000000106 /* Info.plist */,
+			);
+			path = ReveilWidget;
+			sourceTree = "<group>";
+		};
 		0F4955E52ADA631200227265 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
@@ -555,6 +597,7 @@
 				CC4AE2B62ACAA4B400DA23AC /* Reveil */,
 				CC7DC28F2AF3EB1300D50EDC /* library-stub */,
 				0FA065792B3D8363000A7ECE /* ReveilHelper */,
+				DA0000000000000000000103 /* ReveilWidget */,
 				CC4AE2B52ACAA4B400DA23AC /* Products */,
 				CCA0954C2AE786CF00F5E55F /* Frameworks */,
 			);
@@ -563,6 +606,7 @@
 		CC4AE2B52ACAA4B400DA23AC /* Products */ = {
 			isa = PBXGroup;
 			children = (
+				DA0000000000000000000102 /* ReveilWidget.appex */,
 				CC4AE2B42ACAA4B400DA23AC /* Reveil.app */,
 				CC7DC28E2AF3EB1300D50EDC /* library_stub.framework */,
 				0FA065782B3D8363000A7ECE /* ReveilHelper */,
@@ -800,6 +844,23 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		DA0000000000000000000101 /* ReveilWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DA000000000000000000010C /* Build configuration list for PBXNativeTarget "ReveilWidget" */;
+			buildPhases = (
+				DA0000000000000000000109 /* Sources */,
+				DA000000000000000000010A /* Frameworks */,
+				DA000000000000000000010B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ReveilWidget;
+			productName = ReveilWidget;
+			productReference = DA0000000000000000000102 /* ReveilWidget.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		0FA065772B3D8363000A7ECE /* ReveilHelper */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0FA0657C2B3D8363000A7ECE /* Build configuration list for PBXNativeTarget "ReveilHelper" */;
@@ -827,6 +888,7 @@
 				CC4AE2B12ACAA4B400DA23AC /* Frameworks */,
 				CC4AE2B22ACAA4B400DA23AC /* Resources */,
 				5024F6F02B1829EE000CEAB5 /* Embed Frameworks */,
+				DA000000000000000000010F /* Embed App Extensions */,
 				CC0C7CCE2B3DADD6003B8C6F /* ShellScript */,
 			);
 			buildRules = (
@@ -834,6 +896,7 @@
 			dependencies = (
 				0F008FD42B3E7AB700158058 /* PBXTargetDependency */,
 				5024F6EF2B1829EE000CEAB5 /* PBXTargetDependency */,
+				DA0000000000000000000111 /* PBXTargetDependency */,
 			);
 			name = Reveil;
 			packageProductDependencies = (
@@ -876,6 +939,9 @@
 				LastSwiftUpdateCheck = 1510;
 				LastUpgradeCheck = 1520;
 				TargetAttributes = {
+					DA0000000000000000000101 = {
+						CreatedOnToolsVersion = 15.4;
+					};
 					0FA065772B3D8363000A7ECE = {
 						CreatedOnToolsVersion = 15.1;
 					};
@@ -913,11 +979,19 @@
 				CC4AE2B32ACAA4B400DA23AC /* Reveil */,
 				CC7DC28D2AF3EB1300D50EDC /* library-stub */,
 				0FA065772B3D8363000A7ECE /* ReveilHelper */,
+				DA0000000000000000000101 /* ReveilWidget */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		DA000000000000000000010B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		CC4AE2B22ACAA4B400DA23AC /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -968,6 +1042,15 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		DA0000000000000000000109 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DA0000000000000000000107 /* ReveilWidget.swift in Sources */,
+				DA0000000000000000000108 /* NetworkAddressProvider.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		0FA065742B3D8363000A7ECE /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1124,6 +1207,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		DA0000000000000000000111 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DA0000000000000000000101 /* ReveilWidget */;
+			targetProxy = DA0000000000000000000112 /* PBXContainerItemProxy */;
+		};
 		0F008FD42B3E7AB700158058 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 0FA065772B3D8363000A7ECE /* ReveilHelper */;
@@ -1151,6 +1239,70 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		DA000000000000000000010D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 5;
+				DEVELOPMENT_TEAM = GXZ23M5TP2;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ReveilWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Reveil;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 2.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.82flex.reveil.ReveilWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		DA000000000000000000010E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 5;
+				DEVELOPMENT_TEAM = GXZ23M5TP2;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ReveilWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Reveil;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 2.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.82flex.reveil.ReveilWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
 		0FA0657D2B3D8363000A7ECE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1494,6 +1646,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		DA000000000000000000010C /* Build configuration list for PBXNativeTarget "ReveilWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DA000000000000000000010D /* Debug */,
+				DA000000000000000000010E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		0FA0657C2B3D8363000A7ECE /* Build configuration list for PBXNativeTarget "ReveilHelper" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
