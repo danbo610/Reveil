@@ -45,7 +45,9 @@ struct AboutView: View {
     private static let translatorPage: String = NSLocalizedString("TRANSLATOR_URL", comment: "https://TRANSLATOR_URL")
 
     var body: some View {
-        ScrollView(.vertical) {
+        let bodyStarted = CFAbsoluteTimeGetCurrent()
+        defer { PerfLog.record("About.body", since: bodyStarted) }
+        return ScrollView(.vertical) {
             VStack(alignment: .center, spacing: 20) {
                 Image("IconShape")
                     .resizable()
@@ -131,6 +133,8 @@ struct AboutView: View {
             }
             .padding()
         }
+        .onAppear { PerfLog.mark("About.onAppear") }
+        .onDisappear { PerfLog.mark("About.onDisappear") }
     }
 }
 

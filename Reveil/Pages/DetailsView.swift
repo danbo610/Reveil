@@ -73,6 +73,8 @@ struct DetailsView: View {
         }
         .listStyle(.plain)
         .listSectionSeparator(hidden: true)
+        .onAppear { PerfLog.mark("Details.onAppear") }
+        .onDisappear { PerfLog.mark("Details.onDisappear") }
     }
 }
 

@@ -9,7 +9,10 @@ import SwiftUI
 
 @main
 struct ReveilApp: App {
-    init() { _ = PinStorage.shared }
+    init() {
+        PerfLog.start()
+        _ = PinStorage.shared
+    }
 
     var body: some Scene {
         WindowGroup {
