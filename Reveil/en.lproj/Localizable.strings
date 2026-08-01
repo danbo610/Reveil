@@ -1092,6 +1092,6 @@
 
 "LAN_ADDRESS" = "Intranet";
 "DOMESTIC_ADDRESS" = "Domestic";
-"FOREIGN_ADDRESS" = "Foreign";
-"BLOCKED_ADDRESS" = "Blocked";
+"FOREIGN_ADDRESS" = "International";
+"BLOCKED_ADDRESS" = "Cloudflare";
 "NETWORK_ADDRESSES" = "IP Addresses";
