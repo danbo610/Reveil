@@ -54,8 +54,8 @@ jobs:
         run: |
           set -Eeuo pipefail
 
-          marketing_version="${INPUT_MARKETING_VERSION:-3.5}"
-          build_number="${INPUT_BUILD_NUMBER:-442}"
+          marketing_version="${INPUT_MARKETING_VERSION:-3.4}"
+          build_number="${INPUT_BUILD_NUMBER:-441}"
 
           if [[ "${GITHUB_REF_TYPE:-}" == "tag" ]]; then
             tag="${GITHUB_REF_NAME#v}"

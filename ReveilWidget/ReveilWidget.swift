@@ -83,21 +83,20 @@ struct NetworkAddressWidgetView: View {
     private var compact: Bool { family == .systemSmall }
 
     var body: some View {
-        // Each row takes an equal share of the height so the three of them fill the tile,
-        // rather than hugging their content in the middle of it.
-        VStack(alignment: .leading, spacing: 0) {
+        // Deliberately no .frame(maxHeight: .infinity) on the rows. That made each of them ask
+        // for unbounded height, and the widget archiver rejected the result with
+        // WidgetArchiver.ValidationError — the tile rendered blank. Larger type fills the tile
+        // instead, which the archiver is happy with.
+        VStack(alignment: .leading, spacing: compact ? 10 : 14) {
             AddressRow(symbol: "house.fill", tint: .blue,
                        address: entry.addresses.domestic, compact: compact)
-                .frame(maxHeight: .infinity)
             AddressRow(symbol: "globe.americas.fill", tint: .green,
                        address: entry.addresses.foreign, compact: compact)
-                .frame(maxHeight: .infinity)
             AddressRow(symbol: "lock.shield.fill", tint: .orange,
                        address: entry.addresses.blocked, compact: compact)
-                .frame(maxHeight: .infinity)
         }
         .padding(.horizontal, compact ? 10 : 14)
-        .padding(.vertical, compact ? 6 : 8)
+        .padding(.vertical, compact ? 8 : 12)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
         .widgetContainerBackground()
     }
