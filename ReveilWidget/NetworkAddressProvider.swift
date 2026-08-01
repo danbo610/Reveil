@@ -55,6 +55,9 @@ struct NetworkAddresses {
 }
 
 enum NetworkAddressProvider {
+    // The widget's kind. Shared so that the app reloads exactly the widget it has data for.
+    static let widgetKind = "NetworkAddressWidget"
+
     private static let domesticPageURL = URL(string: "https://ip111.cn/")!
     private static let foreignProbeURL = URL(string: "https://us.ip111.cn/ip.php")!
     private static let blockedProbeURL = URL(string: "https://sspanel.net/ip.php")!

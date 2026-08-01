@@ -98,7 +98,6 @@ struct NetworkAddressWidgetView: View {
         .padding(.horizontal, compact ? 10 : 14)
         .padding(.vertical, compact ? 8 : 12)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-        .widgetURL(URL(string: "reveil://dashboard"))
         .widgetContainerBackground()
     }
 }
@@ -117,11 +116,14 @@ private extension View {
 }
 
 struct NetworkAddressWidget: Widget {
-    private let kind = "NetworkAddressWidget"
+    private let kind = NetworkAddressProvider.widgetKind
 
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: NetworkAddressTimelineProvider()) { entry in
+            // The URL rides along with the rendered snapshot, so a tile still showing an older
+            // render opens the app without one — outermost placement is the documented spot.
             NetworkAddressWidgetView(entry: entry)
+                .widgetURL(URL(string: "reveil://dashboard"))
         }
         .configurationDisplayName("IP 地址")
         .description("显示国内、未墙与被墙线路各自使用的公网 IP。")

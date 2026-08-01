@@ -8,6 +8,7 @@
 //
 
 import Foundation
+import WidgetKit
 
 @MainActor
 final class NetworkAddressModel: ObservableObject {
@@ -35,6 +36,12 @@ final class NetworkAddressModel: ObservableObject {
             addresses = fetched
             lastRefresh = Date()
             isRefreshing = false
+
+            // Nothing tells a widget that the network changed — switching from Wi-Fi to cellular
+            // is invisible to WidgetKit, so its tile keeps whatever address the last reload found.
+            // The app is the only side that can break that cycle, and a reload it asks for while
+            // running is not rationed the way the timeline's own schedule is.
+            WidgetCenter.shared.reloadTimelines(ofKind: NetworkAddressProvider.widgetKind)
         }
     }
 }
