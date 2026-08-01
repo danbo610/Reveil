@@ -124,11 +124,13 @@ enum PerfLog {
             var framePointer = state.__fp
             while frames < maxFrames, framePointer != 0, framePointer % 8 == 0 {
                 var pair = (UInt64(0), UInt64(0))
-                var read = mach_vm_size_t(0)
+                var read = vm_size_t(0)
+                // Reading through the kernel rather than dereferencing: a frame pointer that has
+                // walked off the end of the chain returns an error here instead of a crash.
                 let ok = withUnsafeMutablePointer(to: &pair) {
-                    mach_vm_read_overwrite(
-                        mach_task_self_, mach_vm_address_t(framePointer), 16,
-                        mach_vm_address_t(UInt(bitPattern: $0)), &read
+                    vm_read_overwrite(
+                        mach_task_self_, vm_address_t(framePointer), 16,
+                        vm_address_t(UInt(bitPattern: $0)), &read
                     )
                 }
                 guard ok == KERN_SUCCESS, read == 16, pair.1 != 0 else { break }
