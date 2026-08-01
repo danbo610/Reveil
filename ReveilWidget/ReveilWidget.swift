@@ -53,21 +53,21 @@ private struct AddressRow: View {
     var body: some View {
         HStack(alignment: .center, spacing: 8) {
             Image(systemName: symbol)
-                .font(.system(size: compact ? 15 : 20, weight: .semibold))
+                .font(.system(size: compact ? 22 : 28, weight: .semibold))
                 .foregroundColor(tint)
-                .frame(width: compact ? 20 : 26)
+                .frame(width: compact ? 26 : 34)
 
             Spacer(minLength: 4)
 
             VStack(alignment: .trailing, spacing: 0) {
                 Text(address?.address ?? "—")
-                    .font(.system(size: compact ? 14 : 19, weight: .bold, design: .rounded))
+                    .font(.system(size: compact ? 19 : 26, weight: .bold, design: .rounded))
                     .foregroundColor(.primary)
                     .lineLimit(1)
                     // IPv4 runs to fifteen characters; let it shrink rather than truncate.
-                    .minimumScaleFactor(0.5)
+                    .minimumScaleFactor(0.4)
                 Text(address?.location ?? "无法访问")
-                    .font(.system(size: compact ? 10 : 12))
+                    .font(.system(size: compact ? 12 : 15))
                     .foregroundColor(.secondary)
                     .lineLimit(1)
                     .minimumScaleFactor(0.6)
@@ -83,15 +83,21 @@ struct NetworkAddressWidgetView: View {
     private var compact: Bool { family == .systemSmall }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: compact ? 6 : 10) {
+        // Each row takes an equal share of the height so the three of them fill the tile,
+        // rather than hugging their content in the middle of it.
+        VStack(alignment: .leading, spacing: 0) {
             AddressRow(symbol: "house.fill", tint: .blue,
                        address: entry.addresses.domestic, compact: compact)
+                .frame(maxHeight: .infinity)
             AddressRow(symbol: "globe.americas.fill", tint: .green,
                        address: entry.addresses.foreign, compact: compact)
+                .frame(maxHeight: .infinity)
             AddressRow(symbol: "lock.shield.fill", tint: .orange,
                        address: entry.addresses.blocked, compact: compact)
+                .frame(maxHeight: .infinity)
         }
-        .padding(compact ? 12 : 16)
+        .padding(.horizontal, compact ? 10 : 14)
+        .padding(.vertical, compact ? 6 : 8)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
         .widgetContainerBackground()
     }

@@ -19,15 +19,20 @@ struct NetworkAddress {
     let address: String
     let location: String
 
-    // The probes answer "119.136.90.230 中国 东莞市" — address first, then place.
+    // The probes answer "113.90.130.56<br/>中国 深圳" — address, then markup, then the place.
+    // The separator is not always the same: it has been seen as a plain space and as <br/>, so
+    // every tag is turned into whitespace before the value is split rather than assuming either.
     init?(reported: String?) {
         guard let reported else { return nil }
-        let collapsed = reported
+        let stripped = reported.replacingOccurrences(
+            of: "<[^>]+>", with: " ", options: .regularExpression
+        )
+        let fields = stripped
             .components(separatedBy: .whitespacesAndNewlines)
             .filter { !$0.isEmpty }
-        guard let first = collapsed.first, first.contains(".") else { return nil }
+        guard let first = fields.first, first.contains(".") else { return nil }
         address = first
-        location = collapsed.dropFirst().joined(separator: " ")
+        location = fields.dropFirst().joined(separator: " ")
     }
 }
 
@@ -37,9 +42,9 @@ struct NetworkAddresses {
     var blocked: NetworkAddress?
 
     static let placeholder = NetworkAddresses(
-        domestic: NetworkAddress(reported: "119.136.90.230 中国 东莞市"),
-        foreign: NetworkAddress(reported: "162.222.90.70 美国 洛杉矶"),
-        blocked: NetworkAddress(reported: "104.21.70.10 美国 圣何塞")
+        domestic: NetworkAddress(reported: "113.90.130.56<br/>中国 深圳"),
+        foreign: NetworkAddress(reported: "23.132.124.147<br/>美国 洛杉矶"),
+        blocked: NetworkAddress(reported: "104.21.70.10<br/>美国 圣何塞")
     )
 }
 
@@ -83,7 +88,7 @@ enum NetworkAddressProvider {
         return parser(body)
     }
 
-    // "…从国内测试…<div class="card-body">\n<p>\n119.136.90.230 中国 东莞市</p>"
+    // "…从国内测试…<div class="card-body">\n<p>\n113.90.130.56<br/>中国 深圳</p>"
     private static func addressFromPage(_ body: String) -> String? {
         guard let marker = body.range(of: "从国内测试") else { return nil }
         let tail = body[marker.upperBound...]
@@ -93,7 +98,7 @@ enum NetworkAddressProvider {
         return String(afterOpen[..<close.lowerBound])
     }
 
-    // "<div style="text-align:center">38.135.180.20 美国 帕萨迪纳</div>"
+    // "<div style="text-align:center">23.132.124.147<br/>美国 洛杉矶</div>"
     private static func addressFromProbe(_ body: String) -> String? {
         guard let open = body.range(of: ">"), let close = body.range(of: "</div>"),
               open.upperBound <= close.lowerBound
