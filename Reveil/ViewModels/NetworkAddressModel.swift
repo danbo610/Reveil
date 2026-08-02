@@ -2,9 +2,8 @@
 //  NetworkAddressModel.swift
 //  Reveil
 //
-//  Backs the dashboard's address card. The lookups go out over the network, so they are throttled
-//  and never repeated while one is already running — the dashboard rebuilds its views on every
-//  tick of the global timer.
+//  Backs the dashboard's address card. The lookups go out over the network, so ordinary lifecycle
+//  refreshes are throttled and overlapping requests are coalesced.
 //
 
 import Foundation
@@ -22,9 +21,12 @@ final class NetworkAddressModel: ObservableObject {
 
     private init() {}
 
-    func refreshIfStale() {
+    func refresh(force: Bool = false) {
         guard !isRefreshing else { return }
-        if let lastRefresh, Date().timeIntervalSince(lastRefresh) < Self.refreshInterval {
+        if !force,
+           let lastRefresh,
+           Date().timeIntervalSince(lastRefresh) < Self.refreshInterval
+        {
             // The local address costs nothing and can change without a lookup, so keep it current.
             addresses.local = NetworkAddressProvider.localAddress
             return

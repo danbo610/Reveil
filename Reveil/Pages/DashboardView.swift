@@ -55,6 +55,7 @@ struct DashboardView: View, GlobalTimerObserver {
                             RoundedRectangle(cornerRadius: 4)
                                 .stroke(Color(PlatformColor.separatorAlias), lineWidth: 1)
                         }
+                        .overlay { networkAddressNavigationLink() }
                 }
 
                 if PinStorage.shared.isPinned(forKey: .Security) {
@@ -133,6 +134,15 @@ struct DashboardView: View, GlobalTimerObserver {
     @ViewBuilder
     private func trafficWidgetBuilder(_ entry: TrafficEntryIO) -> some View {
         TrafficWidget(label: entry.name, style: .compat, receivedEntry: entry.download, sentEntry: entry.upload)
+    }
+
+    @ViewBuilder
+    private func networkAddressNavigationLink() -> some View {
+        NavigationLink(destination: {
+            NetworkAddressDetailsView()
+        }, label: { Color.clear })
+        .contentShape(Rectangle())
+        .accessibilityLabel(NSLocalizedString("IP_ADDRESS_DETAILS", comment: "IP Address Details"))
     }
 
     @ViewBuilder

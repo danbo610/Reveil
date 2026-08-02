@@ -1095,3 +1095,7 @@
 "FOREIGN_ADDRESS" = "Internacional";
 "BLOCKED_ADDRESS" = "Cloudflare";
 "NETWORK_ADDRESSES" = "Direcciones IP";
+"IP_ADDRESS_DETAILS" = "Detalles de direcciones IP";
+"IP_LOOKUP_STATUS" = "Estado";
+"IP_LOOKUP_FAILED" = "No se pudo cargar";
+"NO_PUBLIC_IP_ADDRESSES" = "No hay direcciones IP públicas disponibles";

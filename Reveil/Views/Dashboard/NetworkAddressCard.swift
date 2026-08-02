@@ -64,6 +64,9 @@ struct NetworkAddressCard: View {
                     ProgressView()
                         .scaleEffect(0.7)
                 }
+                Image(systemName: "chevron.right")
+                    .font(Font.system(.body).weight(.regular))
+                    .foregroundColor(Color(PlatformColor.tertiaryLabelAlias))
             }
 
             Row(symbol: "wifi", tint: .teal,
@@ -86,7 +89,7 @@ struct NetworkAddressCard: View {
                 location: model.addresses.blocked?.location,
                 isRefreshing: model.isRefreshing)
         }
-        .onAppear { model.refreshIfStale() }
+        .onAppear { model.refresh() }
     }
 }
 

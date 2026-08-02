@@ -46,6 +46,10 @@ struct NetworkAddresses {
     var foreign: NetworkAddress?
     var blocked: NetworkAddress?
 
+    var publicAddresses: [String] {
+        [domestic?.address, foreign?.address, blocked?.address].compactMap { $0 }
+    }
+
     static let placeholder = NetworkAddresses(
         local: "192.168.1.100",
         domestic: NetworkAddress(reported: "113.90.130.56<br/>中国 深圳"),
