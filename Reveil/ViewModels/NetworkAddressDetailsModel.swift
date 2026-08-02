@@ -2,16 +2,16 @@
 //  NetworkAddressDetailsModel.swift
 //  Reveil
 //
-//  Resolves the public addresses shown on the dashboard through ip.im. Requests are deliberately
-//  sequential to preserve the card's domestic/foreign/blocked order and stay well inside the
-//  service's rate limit; each completed lookup is published immediately.
+//  Resolves the public addresses shown on the dashboard through ip.im. Results are cached by IP;
+//  misses are requested sequentially to preserve the card's order and each result is published
+//  immediately.
 //
 
 import Combine
 import Foundation
 
-private struct NetworkAddressDetails {
-    struct Field {
+private struct NetworkAddressDetails: Codable {
+    struct Field: Codable {
         let name: String
         let value: String
     }
@@ -24,17 +24,17 @@ private enum NetworkAddressDetailsProvider {
     private static let baseURL = URL(string: "https://ip.im")!
     private static let timeout: TimeInterval = 10
 
-    private static let fieldOrder = [
-        "hostname", "city", "region", "country", "loc", "org", "postal", "timezone", "asn",
-    ]
-
     private static let fieldNames = [
         "hostname": "Hostname",
+        "countrycode": "CountryCode",
+        "country": "Country",
+        "province": "Province",
         "city": "City",
         "region": "Region",
-        "country": "Country",
+        "districts": "Districts",
         "loc": "Loc",
         "org": "Org",
+        "isp": "Isp",
         "postal": "Postal",
         "timezone": "Timezone",
         "asn": "ASN",
@@ -69,7 +69,9 @@ private enum NetworkAddressDetailsProvider {
     }
 
     private static func parse(_ body: String, expectedAddress: String) -> NetworkAddressDetails? {
-        var values = [String: String]()
+        var responseAddress: String?
+        var fields = [NetworkAddressDetails.Field]()
+        var seenKeys = Set<String>()
 
         for rawLine in body.split(whereSeparator: { $0.isNewline }) {
             let line = String(rawLine).trimmingCharacters(in: .whitespacesAndNewlines)
@@ -81,18 +83,59 @@ private enum NetworkAddressDetailsProvider {
             let value = String(line[line.index(after: separator)...])
                 .trimmingCharacters(in: .whitespacesAndNewlines)
 
-            guard key == "ip" || fieldNames[key] != nil, !value.isEmpty else { continue }
-            values[key] = value
+            guard !value.isEmpty else { continue }
+            if key == "ip" {
+                responseAddress = value
+            } else if let name = fieldNames[key], seenKeys.insert(key).inserted {
+                fields.append(NetworkAddressDetails.Field(name: name, value: value))
+            }
         }
 
-        guard values["ip"] == expectedAddress else { return nil }
-        let fields = fieldOrder.compactMap { key -> NetworkAddressDetails.Field? in
-            guard let name = fieldNames[key], let value = values[key] else { return nil }
-            return NetworkAddressDetails.Field(name: name, value: value)
-        }
-        guard !fields.isEmpty else { return nil }
+        guard responseAddress == expectedAddress, !fields.isEmpty else { return nil }
 
         return NetworkAddressDetails(address: expectedAddress, fields: fields)
+    }
+}
+
+private enum NetworkAddressDetailsCache {
+    private struct Record: Codable {
+        let details: NetworkAddressDetails
+        let storedAt: Date
+    }
+
+    private static let defaultsKey = "NetworkAddressDetailsCache.v1"
+    private static let maximumAge: TimeInterval = 3 * 24 * 60 * 60
+
+    static func details(for address: String, now: Date = Date()) -> NetworkAddressDetails? {
+        let records = validRecords(now: now)
+        guard let record = records[address],
+              record.details.address == address,
+              !record.details.fields.isEmpty
+        else {
+            return nil
+        }
+        return record.details
+    }
+
+    static func store(_ details: NetworkAddressDetails, now: Date = Date()) {
+        var records = validRecords(now: now)
+        records[details.address] = Record(details: details, storedAt: now)
+        write(records)
+    }
+
+    private static func validRecords(now: Date) -> [String: Record] {
+        guard let data = UserDefaults.standard.data(forKey: defaultsKey),
+              let records = try? JSONDecoder().decode([String: Record].self, from: data)
+        else {
+            return [:]
+        }
+
+        return records.filter { now.timeIntervalSince($0.value.storedAt) < maximumAge }
+    }
+
+    private static func write(_ records: [String: Record]) {
+        guard let data = try? JSONEncoder().encode(records) else { return }
+        UserDefaults.standard.set(data, forKey: defaultsKey)
     }
 }
 
@@ -128,6 +171,18 @@ final class NetworkAddressDetailsModel: ObservableObject {
         lookupTask = Task { [weak self] in
             for address in uniqueAddresses {
                 guard !Task.isCancelled else { return }
+
+                if let cachedDetails = NetworkAddressDetailsCache.details(for: address) {
+                    guard let self,
+                          !Task.isCancelled,
+                          self.requestID == currentRequestID
+                    else {
+                        return
+                    }
+                    self.append(cachedDetails)
+                    continue
+                }
+
                 let details = await NetworkAddressDetailsProvider.details(for: address)
                 guard let self,
                       !Task.isCancelled,
@@ -137,6 +192,7 @@ final class NetworkAddressDetailsModel: ObservableObject {
                 }
 
                 if let details {
+                    NetworkAddressDetailsCache.store(details)
                     self.append(details)
                 } else {
                     self.appendFailure(for: address)
